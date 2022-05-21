@@ -1,6 +1,6 @@
-const LoginService = require('../services/Login.service')
+const RegisterService = require('../services/Register.service')
 
 
  exports.register = (req, res) => {
-    LoginService.registe(req, res)
+    RegisterService.register(req, res)
 }

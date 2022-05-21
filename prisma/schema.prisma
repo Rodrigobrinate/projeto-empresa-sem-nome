@@ -3,6 +3,7 @@
 
 
 
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,9 +16,9 @@ datasource db {
 model User {
 id      Int   @default(autoincrement()) @id
 name    String
-email   String
+email   String @unique
 password String
 department String
-access_level String
+access_level Int
 }
 
