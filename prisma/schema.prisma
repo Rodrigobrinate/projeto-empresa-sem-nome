@@ -2,6 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
 
 
 generator client {
@@ -10,7 +13,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:123456@127.0.0.1:3306/projeto-emprese-sem-nome"
 }
 
 model User {
@@ -18,7 +21,87 @@ id      Int   @default(autoincrement()) @id
 name    String
 email   String @unique
 password String
+massiva Massive[]
 department String
 access_level Int
+historic_pausa Historic_pause[]
+massive_user Massive_user[]
+pause Pause[]
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
 }
 
+model City {
+  id Int @default(autoincrement()) @id
+  city String
+  massiva Massive[]
+  massiva_user Massive_user[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+
+model Massive {
+id      Int   @default(autoincrement()) @id
+name    String
+date    DateTime
+returndate DateTime
+type    String
+user     User       @relation(fields: [user_id], references: [id])
+user_id   Int
+city     City       @relation(fields: [cidade_id], references: [id])
+cidade_id   Int
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
+
+massive_user Massive_user[]
+}
+
+model Type_pause {
+id      Int   @default(autoincrement()) @id
+name    String
+time    Int
+pausa Pause[]
+historic_pausa Historic_pause[]
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
+
+}
+
+model Pause {
+id      Int   @default(autoincrement()) @id
+typePause Type_pause       @relation(fields: [typePause_id], references: [id])
+typePause_id   Int
+user     User       @relation(fields: [user_id], references: [id])
+user_id   Int
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
+}
+
+model Historic_pause {
+  id      Int   @default(autoincrement()) @id
+  initial DateTime
+  final DateTime
+  user     User       @relation(fields: [user_id], references: [id])
+  user_id   Int
+  type_pause Type_pause       @relation(fields: [type_pause_id], references: [id])
+  type_pause_id   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+
+model Massive_user {
+  id      Int   @default(autoincrement()) @id
+  
+  name    String
+  date    DateTime
+  massiva Massive      @relation(fields: [massiva_id], references: [id])
+  massiva_id   Int
+  city    City      @relation(fields: [city_id], references: [id])
+  city_id   Int
+  user     User       @relation(fields: [user_id], references: [id])
+  user_id   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
